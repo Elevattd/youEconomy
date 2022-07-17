@@ -1,5 +1,6 @@
 const { User, Transaction } = require("../db");
 const { getUser } = require("../utils/user");
+const { generateAcessToken, updateRefreshToken } = require("../utils/auth");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const config = require("../../config");
@@ -21,7 +22,31 @@ const singUp = async (req, res, next) => {
     next(error);
   }
 };
-const singIn = (req, res, next) => {};
+const singIn = async (req, res, next) => {
+  let user;
+  try {
+    user = await await getUser("email", req.body.email);
+    if (!user) res.status(404).send("User not exist");
+    if (!(await bcrypt.compare(req.body.password, user.password)))
+      res.status(400).send("Incorrent Password");
+    const accessToken = generateAcessToken(user);
+    const refreshToken = await updateRefreshToken(user);
+    res.cookie("jwt", refreshToken, {
+      httpOnly: true,
+      maxAge: 24 * 60 * 60 * 1000,
+    });
+    res.send({
+      user: {
+        name: user.name,
+        email: user.email,
+        id: user.id,
+      },
+      accessToken,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
 
 module.exports = {
   singUp,
