@@ -92,7 +92,6 @@ const deleteTransaction = async (req, res, next) => {
     const transaction = await Transaction.findByPk(id);
 
     const user = await User.findByPk(userId);
-    console.log("asdasdasda user", user);
     if (!user) {
       res.status(401).send({ msg: "User not found" });
     }
