@@ -1,7 +1,7 @@
 require("dotenv").config();
 const jwt = require("jsonwebtoken");
 
-module.exports = (req, res, next) => {
+const authMiddleware = (req, res, next) => {
   const token = req.headers.authorization?.split(" ")[1];
   const baerer = req.headers.authorization?.split(" ")[0];
   if (!token || baerer !== "Bearer")
@@ -14,4 +14,8 @@ module.exports = (req, res, next) => {
     req.body.user = decoded.UserInfo;
     next();
   });
+};
+
+module.exports = {
+  authMiddleware,
 };
