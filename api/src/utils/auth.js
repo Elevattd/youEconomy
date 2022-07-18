@@ -49,7 +49,7 @@ const verifyRefreshToken = (user) => {
         status: 403,
         message: "Token expired",
       };
-    else newToken = generateAcessToken(user);
+    newToken = generateAcessToken(user);
   });
   return newToken;
 };
