@@ -3,6 +3,7 @@ import Button from "react-bootstrap/esm/Button";
 import { useSelector } from "react-redux";
 import { selectCurrentUser } from "../../../features/slices/authSlice";
 import Tables from "../Tables/Tables";
+import PostTransaction from "../PostTransaction/PostTransaction";
 
 const Transactions = ({ refreshList }) => {
   const currentUser = useSelector(selectCurrentUser);
@@ -22,7 +23,7 @@ const Transactions = ({ refreshList }) => {
         </Button>
       </div>
       <br />
-      {/* <PostTransaction show={modalShow} onHide={() => setModalShow(false)} /> */}
+      <PostTransaction show={modalShow} onHide={() => setModalShow(false)} />
       <select name="type" value={type} onChange={handleSelectChange}>
         <option value="entry" name="type">
           Entry
