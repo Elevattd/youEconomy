@@ -16,6 +16,22 @@ const getUser = async (prop, value) => {
   return user.dataValues;
 };
 
+const getBalance = async (userId) => {
+  const transacionsFind = await Transaction.findAll({
+    where: { userId: userId },
+  });
+
+  let balance = 0;
+
+  transacionsFind.forEach((b) => {
+    b.dataValues.type == "entry"
+      ? (balance += parseInt(b.dataValues.value))
+      : (balance -= parseInt(b.dataValues.value));
+  });
+  return balance;
+};
+
 module.exports = {
   getUser,
+  getBalance,
 };

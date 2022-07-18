@@ -45,6 +45,7 @@ const singIn = async (req, res, next) => {
         name: user.name,
         email: user.email,
         id: user.id,
+        balance: user.balance,
       },
       accessToken,
     });
