@@ -1,11 +1,11 @@
 import React from "react";
-
-import Loader from "../../components/visual/Loader/Loader";
+import Index from "../../pages/Index/Index";
 import Login from "../../components/visual/Login/Login";
 import useUser from "../../utils/hooks/useUser";
+import Transactions from "../../components/visual/Transactions/Transactions";
 
 const Home = () => {
-  const { currentToken } = useUser();
+  const { currentToken, currentUser, refreshList } = useUser();
 
   const content = !currentToken ? (
     <div>
@@ -13,7 +13,8 @@ const Home = () => {
     </div>
   ) : (
     <>
-      <div>{/* Index, Tables with transactions or button for switch */}</div>
+      <Index currentUser={currentUser} />
+      <Transactions refreshList={refreshList} />
     </>
   );
   return (
