@@ -17,7 +17,6 @@ export const authApiSlice = apiSlice.injectEndpoints({
         dispatch(setIsLoading(true));
         try {
           const { data } = await queryFulfilled;
-          console.log("adaasdadasdasdasdasdasd DATA", data);
           dispatch(
             setCredentials({
               user: data.user,
