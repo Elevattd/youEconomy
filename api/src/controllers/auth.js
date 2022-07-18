@@ -34,7 +34,7 @@ const singIn = async (req, res, next) => {
     if (!user) return res.status(404).send(`User not found`);
     if (!(await bcrypt.compare(req.body.password, user.password)))
       return res.status(400).send(`Password incorrect`);
-    const accessToken = generateAccessToken(user);
+    const accessToken = generateAcessToken(user);
     const refreshToken = await updateRefreshToken(user);
     res.cookie("jwt", refreshToken, {
       httpOnly: true,
@@ -73,7 +73,7 @@ const handleUserSession = async (req, res, next) => {
   if (!cookies.jwt) return res.status(401).send(`Unauthorized`);
   const refreshToken = cookies.jwt;
   try {
-    const user = await getUserFromDbByField("refreshToken", refreshToken);
+    const user = await getUser("refreshToken", refreshToken);
     if (!user) return next({ status: 404, message: "Session Inactive" });
     let newToken = verifyRefreshToken(user);
     if (typeof newToken === "string") {
@@ -96,7 +96,7 @@ const logOut = async (req, res, next) => {
   if (!cookies.jwt) return res.status(401).send(`No token found, unauthorized`);
   const refreshToken = cookies.jwt;
   try {
-    const user = await getUserFromDbByField("refreshToken", refreshToken);
+    const user = await getUser("refreshToken", refreshToken);
     if (!user) {
       res.clearCookie("jwt", { httpOnly: true, maxAge: 24 * 60 * 60 * 1000 });
       return res.sendStatus(204);
