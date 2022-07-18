@@ -34,7 +34,7 @@ const createTransaction = async (req, res, next) => {
   }
 };
 
-const getTransactionsById = async (req, res) => {
+const getTransactionsById = async (req, res, next) => {
   const { id } = req.params;
 
   try {
@@ -49,27 +49,6 @@ const getTransactionsById = async (req, res) => {
   }
 };
 
-//   async getCurrentTransaction(req, res, next) {
-//     const { userId } = req.params;
-//     // const { type } = req.query;
-
-//     try {
-//       let transaction = await Transaction.findAll({
-//         where: { userId },
-//         // order: [[{ type }, "DESC"]],
-//         order: [["createdAt", "DESC"]],
-//         limit: 10,
-//       });
-//       if (!transaction || transaction.length === 0) {
-//         res.status(400).send({ msg: `User: ${userId}, has no transactions` });
-//       } else {
-//         res.status(200).send(transaction);
-//       }
-//     } catch (error) {
-//       next(error);
-//     }
-//   },
-
 const getCurrentTransaction = async (req, res, next) => {
   const { userId } = req.params;
   try {
@@ -82,7 +61,7 @@ const getCurrentTransaction = async (req, res, next) => {
       ? res.send(transaction)
       : res.status(404).send(`Operation not found with id: ${id}`);
   } catch (error) {
-    console.log(error);
+    next.log(error);
   }
 };
 
@@ -102,39 +81,9 @@ const getHistory = async (req, res, next) => {
           .status(404)
           .send(`None transactions were found with userId: ${userId}`);
   } catch (error) {
-    console.log(error);
+    next(error);
   }
 };
-// async getHistory(req, res, next) {
-//   const { userId } = req.params;
-//   const { type } = req.query;
-
-//   try {
-//     let filter = {
-//       where: { userId },
-//       order: [["createdAt", "DESC"]],
-//     };
-//     if (type) {
-//       if (type === "all") {
-//         filter = {
-//           where: { userId },
-//           order: [["createdAt", "DESC"]],
-//         };
-//         console.log("entro flama");
-//       }
-//       filter = { ...filter, where: { userId, type } };
-//     }
-//     const transaction = await Transaction.findAll(filter);
-
-//     if (!transaction || transaction.length === 0) {
-//       res.status(400).send({ msg: `User: ${userId}, has no transactions` });
-//     } else {
-//       res.status(200).send(transaction);
-//     }
-//   } catch (error) {
-//     next(error);
-//   }
-// },
 
 const deleteTransaction = async (req, res, next) => {
   const { userId } = req.params;
