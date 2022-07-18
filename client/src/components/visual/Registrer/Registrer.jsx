@@ -3,7 +3,7 @@ import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 
-import { Toast } from "../../../utils/alerts";
+import { Toast } from "../../../utils/alerts/index";
 import {
   validateEmail,
   validateName,
@@ -24,18 +24,18 @@ const Registrer = (props) => {
     e.preventDefault();
 
     await register({ ...input }).then((res) => {
+      if (res.error) {
+        Toast.fire({
+          icon: "error",
+          title: `${res.error.data}`,
+        });
+      }
       if (res.data) {
         Toast.fire({
           icon: "success",
           title: `Successful!`,
         });
         props.onHide();
-      }
-      if (res.error.data.msg) {
-        Toast.fire({
-          icon: "error",
-          title: `${res.error.data.msg}`,
-        });
       }
     });
   };

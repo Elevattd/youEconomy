@@ -21,7 +21,7 @@ const singUp = async (req, res, next) => {
     const userExists = await getUser("email", user.email);
     if (userExists) return res.status(400).send(`User already exists`);
     await User.create(user);
-    res.sendStatus(201);
+    res.status(201).send({ msg: "Created" });
   } catch (error) {
     next(error);
   }
