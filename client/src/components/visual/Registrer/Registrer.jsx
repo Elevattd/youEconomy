@@ -24,19 +24,33 @@ const Registrer = (props) => {
     e.preventDefault();
 
     await register({ ...input }).then((res) => {
-      if (res.error) {
+      if (
+        Object.keys(errorsPassword).length === 1 ||
+        Object.keys(errorsName).length === 1 ||
+        Object.keys(errorsEmail).length === 1
+      ) {
         Toast.fire({
           icon: "error",
-          title: `${res.error.data}`,
+          title: `Please correct the errors.`,
         });
-      }
-      if (res.data) {
-        Toast.fire({
-          icon: "success",
-          title: `Successful!`,
-        });
-        props.onHide();
-      }
+      } else
+        try {
+          if (res.data) {
+            Toast.fire({
+              icon: "success",
+              title: `Account Created successfully`,
+            });
+            props.onHide();
+          }
+          if (res.error) {
+            Toast.fire({
+              icon: "error",
+              title: `${res.error.data}`,
+            });
+          }
+        } catch (error) {
+          console.log("error");
+        }
     });
   };
 
