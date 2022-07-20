@@ -8,7 +8,6 @@ export const userApi = apiSlice.injectEndpoints({
       async onQueryStarted(_, { dispatch, queryFulfilled }) {
         try {
           const { data } = await queryFulfilled;
-
           dispatch(
             setCredentials({
               user: {

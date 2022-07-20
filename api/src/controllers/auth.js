@@ -62,7 +62,6 @@ const handleRefreshToken = async (req, res, next) => {
     const user = await getUser("refreshToken", refreshToken);
     if (!user) return res.status(401).send(`Forbiden`);
     let newToken = verifyRefreshToken(user);
-    console.log("newToken de lo que se manda al front", newToken);
     if (typeof newToken === "string") res.send({ accesToken: newToken });
     else res.status(newToken.status).send(newToken.message);
   } catch (error) {

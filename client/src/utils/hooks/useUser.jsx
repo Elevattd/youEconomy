@@ -4,7 +4,7 @@ import {
   useGetAllTransactionsMutation,
   useGetCurrentQuery,
   useGetUserQuery,
-} from "../../features/api/useApi";
+} from "../../features/api/userApi";
 import {
   selectCurrentToken,
   selectCurrentUser,

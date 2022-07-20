@@ -6,7 +6,7 @@ import InputGroup from "react-bootstrap/esm/InputGroup";
 import { useDispatch } from "react-redux";
 
 import useUser from "../../../utils/hooks/useUser";
-import { useCreateOperationMutation } from "../../../features/api/useApi";
+import { useCreateOperationMutation } from "../../../features/api/userApi";
 
 const Transactions = (props) => {
   const { currentUser, refreshList } = useUser();
@@ -16,7 +16,7 @@ const Transactions = (props) => {
 
   const handleSubmit = async () => {
     props.onHide();
-    refreshList("all");
+    // props.refreshList();
     try {
       dispatch(createOperation({ userId: currentUser.id, data: input }));
     } catch (error) {

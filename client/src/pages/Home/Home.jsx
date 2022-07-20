@@ -12,16 +12,12 @@ const Home = () => {
       <Login />
     </div>
   ) : (
-    <>
+    <div>
       <Index currentUser={currentUser} />
-      <Transactions refreshList={refreshList} />
-    </>
-  );
-  return (
-    <div className="container">
-      <div className=" m-5 ">{content}</div>
+      {/* <Transactions refreshList={refreshList} /> */}
     </div>
   );
+  return content;
 };
 
 export default Home;

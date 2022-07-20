@@ -6,6 +6,7 @@ import RequireAuth from "./components/functions/RequireAuth/RequireAuth.jsx";
 import Home from "./pages/Home/Home";
 import "./App.scss";
 import Layout from "./pages/Layout/Layout.jsx";
+import History from "./pages/History/History.jsx";
 
 function App() {
   useGetUserAuthQuery();
@@ -14,6 +15,7 @@ function App() {
       <Route path="/" element={<Layout />}>
         <Route element={<RequireAuth />}>
           <Route index element={<Home />} />
+          <Route path="/history" element={<History />} />
         </Route>
       </Route>
     </Routes>
