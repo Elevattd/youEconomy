@@ -90,7 +90,7 @@ const Tables = ({ transactions, button }) => {
                 ) : (
                   <td>$-{item.value},00</td>
                 )}
-                <td>{item.date}</td>
+                <td>{item.date.substring(0, 10).split("-").join("/")}</td>
                 <td>
                   {item.type === "entry" ? (
                     <h4 className="text-success">Entry</h4>

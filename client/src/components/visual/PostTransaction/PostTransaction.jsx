@@ -12,18 +12,17 @@ import { validateForm } from "../Login/hooks/useValidate";
 const Transactions = (props) => {
   const { currentUser, refreshList } = useUser();
   const [errorInput, setErrorInput] = useState({});
-  const [input, setInput] = useState({
-    concept: "",
-    type: "",
-    value: null,
-    date: "",
-  });
+  const [input, setInput] = useState({});
   const [createTransaction] = useCreateTransactionMutation();
   const dispatch = useDispatch();
 
   const handleSubmit = async () => {
-    props.onHide();
-    if (!errorInput.length) {
+    if (!Object.keys(input).length || Object.keys(errorInput).length) {
+      Toast.fire({
+        icon: "error",
+        title: `Complete the inputs`,
+      });
+    } else {
       try {
         dispatch(
           await createTransaction({ userId: currentUser.id, data: input }).then(
@@ -35,6 +34,8 @@ const Transactions = (props) => {
                   icon: "success",
                   title: `Transaction created!`,
                 });
+                setInput({});
+                setErrorInput({});
               }
             }
           )
@@ -42,12 +43,6 @@ const Transactions = (props) => {
       } catch (error) {
         return error;
       }
-      setInput({ concept: "", type: "", value: null, date: "" });
-    } else if (errorInput.length) {
-      Toast.fire({
-        icon: "danger",
-        title: `Complete the inputs`,
-      });
     }
   };
 
@@ -61,6 +56,9 @@ const Transactions = (props) => {
       setInput({ ...input, date: date });
     }
     setErrorInput(validateForm({ ...input, [e.target.name]: e.target.value }));
+    console.log("errors", Object.keys(errorInput).length);
+    console.log("input", input);
+    console.log("inputLength", Object.keys(input).length);
   };
 
   const content = (

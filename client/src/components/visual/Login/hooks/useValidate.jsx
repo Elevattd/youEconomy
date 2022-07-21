@@ -66,8 +66,7 @@ const validateForm = (input) => {
   // if (input.concept.length < 6 || input.concept.length > 30) {
   //   errors.concept = "PUTO";
   // }
-  console.log("input", input);
-  console.log("asdasdasd", errors);
+
   return errors;
 };
 
