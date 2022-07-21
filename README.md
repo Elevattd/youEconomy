@@ -4,7 +4,7 @@
   <img height="150" src="./client/src/assets/Screenshot_1.png" />
 </p>
 
-##General objectives:
+## General objectives:
 
 - Build an App using TypeScript, React, React toolkit, Redux, Node and Sequelize.
 - Practice the GIT workflow with the Scrum method.
