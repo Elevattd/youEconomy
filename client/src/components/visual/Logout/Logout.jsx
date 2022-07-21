@@ -12,13 +12,19 @@ const Logout = () => {
   const currentUser = useSelector(selectCurrentUser);
   const [{ isLoading }] = useLoginMutation();
 
+  const handleClick = (e) => {
+    e.preventDefault();
+    logOut();
+    window.location.reload(true);
+  };
+
   const content =
     currentUser && Object.keys(currentUser).length ? (
       <div>
         <Button
           variant="primary "
           size="md"
-          onClick={() => logOut()}
+          onClick={handleClick}
           disabled={isLoading}
         >
           Logout

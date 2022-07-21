@@ -40,4 +40,35 @@ const validateName = (input, field = "name", errorsName = {}) => {
   } else delete errorsName[field];
   return errorsName;
 };
-export { validateEmail, validatePassword, validateName };
+
+const validateForm = (input) => {
+  let errors = {};
+
+  if (!input.concept.match(/^([a-zA-Z0-9]){6,30}$/)) {
+    errors.concept =
+      "The concept must contain at least 6 to 30 characters and only admits letters or numbers";
+  } else if (input.concept.length < 6) {
+    errors.concept =
+      "The concept must contain at least 6 to 30 characters and only admits letters or numbers";
+  } else if (input.concept.length > 30) {
+    errors.concept =
+      "The concept must contain at least 6 to 30 characters and only admits letters or numbers";
+  }
+  if (input.type === "") {
+    errors.type = "Select type of transaction.";
+  }
+  if (input.value === null) {
+    errors.value = "Please entry a value.";
+  }
+  if (input.date === "") {
+    errors.date = "Select date.";
+  }
+  // if (input.concept.length < 6 || input.concept.length > 30) {
+  //   errors.concept = "PUTO";
+  // }
+  console.log("input", input);
+  console.log("asdasdasd", errors);
+  return errors;
+};
+
+export { validateEmail, validatePassword, validateName, validateForm };

@@ -1,14 +1,13 @@
 import React, { useState } from "react";
-import Table from "react-bootstrap/Table";
-import Button from "react-bootstrap/esm/Button";
-import Container from "react-bootstrap/esm/Container";
-import { useDeleteTransactionMutation } from "../../../features/api/userApi";
 import useUser from "../../../utils/hooks/useUser";
 import PostTransaction from "../PostTransaction/PostTransaction";
-
 import UpdateTransaction from "../UpdateTransaction/UpdateTransaction";
-import Swal from "sweetalert2";
+import { useDeleteTransactionMutation } from "../../../features/api/userApi";
+import Table from "react-bootstrap/Table";
+import Button from "react-bootstrap/esm/Button";
+import Alert from "react-bootstrap/esm/Alert";
 import { Toast } from "../../../utils/alerts";
+import Swal from "sweetalert2";
 
 const Tables = ({ transactions, button }) => {
   const { currentUser, refreshList } = useUser();
@@ -18,15 +17,9 @@ const Tables = ({ transactions, button }) => {
   const [updateModalShow, setUpdateModalShow] = useState(false);
 
   const handleUpdate = async (item) => {
-    console.log("item", item);
     setInputData(item);
     setUpdateModalShow(true);
   };
-
-  // const handleDelete = async (id) => {
-  //   await deleteTransaction({ userId: currentUser.id, id: id });
-  //   refreshList();
-  // };
 
   const handleDelete = async (id) => {
     try {
@@ -45,7 +38,6 @@ const Tables = ({ transactions, button }) => {
             userId: currentUser.id,
             id: id,
           });
-          console.log(response);
           refreshList();
           Toast.fire({
             icon: "warning",
@@ -60,10 +52,25 @@ const Tables = ({ transactions, button }) => {
 
   return (
     <div className="container">
+      <br />
+      {button &&
+        (currentUser?.balance >= 0 ? (
+          <div className="row">
+            <Alert key="success" variant="success">
+              Balance: $ {currentUser?.balance},00
+            </Alert>
+          </div>
+        ) : (
+          <div className="row">
+            <Alert key="danger" variant="danger">
+              Balance: $ {currentUser?.balance},00
+            </Alert>
+          </div>
+        ))}{" "}
+      <br />
       <Table striped variant="dark">
         <thead>
           <tr>
-            <th>#</th>
             <th>Concept</th>
             <th>Amount</th>
             <th>Date</th>
@@ -75,11 +82,9 @@ const Tables = ({ transactions, button }) => {
           {transactions?.map((item) => {
             return (
               <tr key={item.id}>
-                <td>{item.id}</td>
                 <td>{`${item?.concept[0].toUpperCase()}${item.concept.slice(
                   1
                 )} `}</td>
-                {/* <td>$ {item.value},00</td> */}
                 {item.type === "entry" ? (
                   <td> {`$  ${item.value},00`}</td>
                 ) : (
@@ -114,7 +119,6 @@ const Tables = ({ transactions, button }) => {
         </tbody>
       </Table>
       <br />
-
       {button && (
         <div className="d-grid gap-2">
           <Button
@@ -126,7 +130,6 @@ const Tables = ({ transactions, button }) => {
           </Button>
         </div>
       )}
-
       <PostTransaction show={modalShow} onHide={() => setModalShow(false)} />
       <UpdateTransaction
         show={updateModalShow}

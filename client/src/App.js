@@ -1,12 +1,11 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
 import { useGetUserAuthQuery } from "./features/api/authApi.js";
-
+import Layout from "./pages/Layout/Layout.jsx";
 import RequireAuth from "./components/functions/RequireAuth/RequireAuth.jsx";
 import Home from "./pages/Home/Home";
-import "./App.scss";
-import Layout from "./pages/Layout/Layout.jsx";
 import History from "./pages/History/History.jsx";
+import "./App.scss";
 
 function App() {
   useGetUserAuthQuery();

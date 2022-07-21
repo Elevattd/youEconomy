@@ -7,9 +7,11 @@ import { useDispatch } from "react-redux";
 import { useCreateTransactionMutation } from "../../../features/api/userApi";
 import useUser from "../../../utils/hooks/useUser";
 import { Toast } from "../../../utils/alerts";
+import { validateForm } from "../Login/hooks/useValidate";
 
 const Transactions = (props) => {
   const { currentUser, refreshList } = useUser();
+  const [errorInput, setErrorInput] = useState({});
   const [input, setInput] = useState({
     concept: "",
     type: "",
@@ -21,26 +23,32 @@ const Transactions = (props) => {
 
   const handleSubmit = async () => {
     props.onHide();
-
-    try {
-      dispatch(
-        await createTransaction({ userId: currentUser.id, data: input }).then(
-          (r) => {
-            if (r.data.msg) {
-              refreshList();
-              props.onHide();
-              Toast.fire({
-                icon: "success",
-                title: `Transaction created!`,
-              });
+    if (!errorInput.length) {
+      try {
+        dispatch(
+          await createTransaction({ userId: currentUser.id, data: input }).then(
+            (r) => {
+              if (r.data.msg) {
+                refreshList();
+                props.onHide();
+                Toast.fire({
+                  icon: "success",
+                  title: `Transaction created!`,
+                });
+              }
             }
-          }
-        )
-      );
-    } catch (error) {
-      return error;
+          )
+        );
+      } catch (error) {
+        return error;
+      }
+      setInput({ concept: "", type: "", value: null, date: "" });
+    } else if (errorInput.length) {
+      Toast.fire({
+        icon: "danger",
+        title: `Complete the inputs`,
+      });
     }
-    setInput({ concept: "", type: "", value: null, date: "" });
   };
 
   const handleInputChange = (e) => {
@@ -50,9 +58,9 @@ const Transactions = (props) => {
       setInput({ ...input, [e.target.name]: e.target.value });
     } else if (e.target.name === "date") {
       const date = new Date(e.target.value).toISOString();
-
       setInput({ ...input, date: date });
     }
+    setErrorInput(validateForm({ ...input, [e.target.name]: e.target.value }));
   };
 
   const content = (
@@ -111,8 +119,19 @@ const Transactions = (props) => {
         />
       </Modal.Body>
       <Modal.Footer>
-        <Form.Group className="mb-3" controlId="formBasicCheckbox">
-          <Form.Check type="checkbox" label="Check" />
+        <Form.Group className="mb-3">
+          {errorInput.concept && (
+            <h6 className="text-danger">{errorInput.concept}</h6>
+          )}
+          {errorInput.type && (
+            <h6 className="text-danger">{errorInput.type}</h6>
+          )}
+          {errorInput.value && (
+            <h6 className="text-danger">{errorInput.value}</h6>
+          )}
+          {errorInput.date && (
+            <h6 className="text-danger">{errorInput.date}</h6>
+          )}
         </Form.Group>
         <Button
           onClick={() => {
@@ -124,6 +143,7 @@ const Transactions = (props) => {
         >
           Confirm
         </Button>
+
         {/* {errorsEmail.email && (
 					<p className="text-danger">{errorsEmail.email}</p>
 				)}

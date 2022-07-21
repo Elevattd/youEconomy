@@ -17,10 +17,7 @@ const NavBar = () => {
             {currentUser && Object.keys(currentUser).length ? (
               <Navbar.Text>
                 Signed in as:{" "}
-                <a href="/profile">
-                  {currentUser.name[0].toUpperCase() +
-                    currentUser.name.slice(1)}
-                </a>{" "}
+                {currentUser.name[0].toUpperCase() + currentUser.name.slice(1)}
               </Navbar.Text>
             ) : null}
           </Navbar.Collapse>

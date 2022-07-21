@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Button from "react-bootstrap/esm/Button";
-import { Link } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import Tables from "../../components/visual/Tables/Tables";
 import useUser from "../../utils/hooks/useUser";
 import ScrollToTop from "react-scroll-to-top";
@@ -8,7 +8,14 @@ import ScrollToTop from "react-scroll-to-top";
 const History = () => {
   const { currentUser, refreshList } = useUser();
   const [type, setType] = useState("all");
+  const navigate = useNavigate();
   useEffect(() => {}, [currentUser?.all_transactions]);
+
+  useEffect(() => {
+    if (!currentUser) {
+      navigate("/");
+    }
+  }, [currentUser]);
 
   const handleSelectChange = (e) => {
     setType(e.target.value.toString());

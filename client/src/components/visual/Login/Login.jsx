@@ -51,7 +51,7 @@ const Login = () => {
     } catch (error) {
       Toast.fire({
         icon: "error",
-        title: `${error.data}`,
+        title: `${error.data.error}`,
       });
     }
   };

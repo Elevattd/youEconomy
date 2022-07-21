@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import useUser from "../../../utils/hooks/useUser";
+import { useUpdateTransactionMutation } from "../../../features/api/userApi";
+import { Toast } from "../../../utils/alerts";
+/* styles */
 import Button from "react-bootstrap/esm/Button";
 import Modal from "react-bootstrap/esm/Modal";
 import Form from "react-bootstrap/esm/Form";
 import InputGroup from "react-bootstrap/esm/InputGroup";
-import { useDispatch } from "react-redux";
-
-import useUser from "../../../utils/hooks/useUser";
-import { useUpdateTransactionMutation } from "../../../features/api/userApi";
-import { Toast } from "../../../utils/alerts";
 
 const UpdateTransaction = (props) => {
   const { refreshList } = useUser();

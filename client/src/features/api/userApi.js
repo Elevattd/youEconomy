@@ -25,7 +25,7 @@ export const userApi = apiSlice.injectEndpoints({
 
     getCurrent: builder.query({
       query: (id) => {
-        if (!id) return "";
+        // if (!id) return "";
         return { url: `/transaction/current/${id}` };
       },
       async onQueryStarted(_, { dispatch, queryFulfilled }) {
@@ -86,8 +86,6 @@ export const userApi = apiSlice.injectEndpoints({
 
     updateTransaction: builder.mutation({
       query: ({ transaction, inputData }) => {
-        console.log("transaction", transaction);
-        console.log("inputData", inputData);
         return {
           url: `/transaction/update/${transaction}`,
           method: "PUT",
