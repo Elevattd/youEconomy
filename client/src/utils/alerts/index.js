@@ -11,3 +11,13 @@ export const Toast = Swal.mixin({
     toast.addEventListener("mouseleave", Swal.resumeTimer);
   },
 });
+
+// export const Swal = Swal.fire({
+//   title: `¿Está seguro que desea?`,
+//   icon: "warning",
+//   showCancelButton: true,
+//   confirmButtonColor: "orange",
+//   cancelButtonColor: "#d33",
+//   cancelButtonText: "Cancelar",
+//   confirmButtonText: "Confirmar",
+// });

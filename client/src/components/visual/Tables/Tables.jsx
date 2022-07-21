@@ -2,15 +2,13 @@ import React, { useState } from "react";
 import Table from "react-bootstrap/Table";
 import Button from "react-bootstrap/esm/Button";
 import Container from "react-bootstrap/esm/Container";
-import {
-  useDeleteTransactionMutation,
-  useUpdateTrasactionMutation,
-} from "../../../features/api/userApi";
+import { useDeleteTransactionMutation } from "../../../features/api/userApi";
 import useUser from "../../../utils/hooks/useUser";
 import PostTransaction from "../PostTransaction/PostTransaction";
-import { useEffect } from "react";
-import { useParams } from "react-router-dom";
+
 import UpdateTransaction from "../UpdateTransaction/UpdateTransaction";
+import Swal from "sweetalert2";
+import { Toast } from "../../../utils/alerts";
 
 const Tables = ({ transactions, button }) => {
   const { currentUser, refreshList } = useUser();
@@ -25,9 +23,39 @@ const Tables = ({ transactions, button }) => {
     setUpdateModalShow(true);
   };
 
+  // const handleDelete = async (id) => {
+  //   await deleteTransaction({ userId: currentUser.id, id: id });
+  //   refreshList();
+  // };
+
   const handleDelete = async (id) => {
-    await deleteTransaction({ userId: currentUser.id, id: id });
-    refreshList();
+    try {
+      Swal.fire({
+        title: `
+        Do you want to delete the transaction?`,
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "orange",
+        cancelButtonColor: "#d33",
+        cancelButtonText: "Cancel",
+        confirmButtonText: "Confirm",
+      }).then((r) => {
+        if (r.isConfirmed) {
+          const response = deleteTransaction({
+            userId: currentUser.id,
+            id: id,
+          });
+          console.log(response);
+          refreshList();
+          Toast.fire({
+            icon: "warning",
+            title: `Transaction deleted!`,
+          });
+        }
+      });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
