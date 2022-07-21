@@ -19,7 +19,7 @@ const createTransaction = async (req, res, next) => {
 
   try {
     if (!user) {
-      return res.status(400).send({ msg: `UserID: ${userId} missmatch` });
+      return res.status(400).send({ error: `UserID: ${userId} missmatch` });
     } else {
       user.createTransaction({
         concept,
@@ -61,7 +61,7 @@ const getCurrentTransaction = async (req, res, next) => {
       ? res.send(transaction)
       : res.status(404).send({ error: `Operation not found with id: ${id}` });
   } catch (error) {
-    next.log(error);
+    next(error);
   }
 };
 

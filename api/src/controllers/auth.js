@@ -19,7 +19,8 @@ const singUp = async (req, res, next) => {
       password: req.body.password,
     };
     const userExists = await getUser("email", user.email);
-    if (userExists) return res.status(400).send(`User already exists`);
+    if (userExists)
+      return res.status(400).send({ error: `User already exists` });
     await User.create(user);
     res.status(201).send({ msg: "Created" });
   } catch (error) {
@@ -31,9 +32,9 @@ const singIn = async (req, res, next) => {
   let user;
   try {
     user = await getUser("email", req.body.email);
-    if (!user) return res.status(404).send(`User not found`);
+    if (!user) return res.status(404).send({ error: `User not found` });
     if (!(await bcrypt.compare(req.body.password, user.password)))
-      return res.status(400).send(`Password incorrect`);
+      return res.status(400).send({ error: `Password incorrect` });
     const accessToken = generateAcessToken(user);
     const refreshToken = await updateRefreshToken(user);
     res.cookie("jwt", refreshToken, {
@@ -56,11 +57,11 @@ const singIn = async (req, res, next) => {
 
 const handleRefreshToken = async (req, res, next) => {
   const cookies = req.cookies;
-  if (!cookies.jwt) return res.status(401).send(`Unauthorized`);
+  if (!cookies.jwt) return res.status(401).send({ error: `Unauthorized` });
   const refreshToken = cookies.jwt;
   try {
     const user = await getUser("refreshToken", refreshToken);
-    if (!user) return res.status(401).send(`Forbiden`);
+    if (!user) return res.status(401).send({ error: `Forbiden` });
     let newToken = verifyRefreshToken(user);
     if (typeof newToken === "string") res.send({ accesToken: newToken });
     else res.status(newToken.status).send(newToken.message);
@@ -71,7 +72,7 @@ const handleRefreshToken = async (req, res, next) => {
 
 const handleUserSession = async (req, res, next) => {
   const cookies = req.cookies;
-  if (!cookies.jwt) return res.status(401).send(`Unauthorized`);
+  if (!cookies.jwt) return res.status(401).send({ error: `Unauthorized` });
   const refreshToken = cookies.jwt;
   try {
     const user = await getUser("refreshToken", refreshToken);
@@ -94,7 +95,9 @@ const handleUserSession = async (req, res, next) => {
 
 const logOut = async (req, res, next) => {
   const cookies = req.cookies;
-  if (!cookies.jwt) return res.status(401).send(`No token found, unauthorized`);
+  console.log("cookies", cookies);
+  if (!cookies.jwt)
+    return res.status(401).send({ error: `No token found, unauthorized` });
   const refreshToken = cookies.jwt;
   try {
     const user = await getUser("refreshToken", refreshToken);
@@ -102,6 +105,7 @@ const logOut = async (req, res, next) => {
       res.clearCookie("jwt", { httpOnly: true, maxAge: 24 * 60 * 60 * 1000 });
       return res.sendStatus(204);
     }
+    console.log("user", user);
     await updateRefreshToken(user, true);
     res.clearCookie("jwt", { httpOnly: true, maxAge: 24 * 60 * 60 * 1000 });
     res.sendStatus(204);
