@@ -22,6 +22,7 @@ export const userApi = apiSlice.injectEndpoints({
         }
       },
     }),
+
     getCurrent: builder.query({
       query: (id) => {
         if (!id) return "";
@@ -40,6 +41,7 @@ export const userApi = apiSlice.injectEndpoints({
         }
       },
     }),
+
     getAllTransactions: builder.mutation({
       query: ({ id, type }) => {
         return {
@@ -70,28 +72,26 @@ export const userApi = apiSlice.injectEndpoints({
           body: { id },
         };
       },
-      // async onQueryStarted(_, { dispatch, queryFulfilled }) {
-      //   try {
-      //     const { data } = await queryFulfilled;
-      //     dispatch(
-      //       setCredentials({
-      //         user: {
-      //           all_transactions: data,
-      //         },
-      //       })
-      //     );
-      //   } catch (error) {
-      //     console.log("error fetching transaction history");
-      //   }
-      // },
     }),
 
-    createOperation: builder.mutation({
+    createTransaction: builder.mutation({
       query: ({ userId, data }) => {
         return {
           url: `/transaction/post/${userId}`,
           method: "POST",
           body: { ...data },
+        };
+      },
+    }),
+
+    updateTransaction: builder.mutation({
+      query: ({ transaction, inputData }) => {
+        console.log("transaction", transaction);
+        console.log("inputData", inputData);
+        return {
+          url: `/transaction/update/${transaction}`,
+          method: "PUT",
+          body: { ...inputData },
         };
       },
     }),
@@ -101,7 +101,8 @@ export const userApi = apiSlice.injectEndpoints({
 export const {
   useGetUserQuery,
   useGetCurrentQuery,
-  useCreateOperationMutation,
+  useCreateTransactionMutation,
   useGetAllTransactionsMutation,
   useDeleteTransactionMutation,
+  useUpdateTransactionMutation,
 } = userApi;

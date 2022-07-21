@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import Button from "react-bootstrap/esm/Button";
 import { Link, useNavigate } from "react-router-dom";
 import Tables from "../../components/visual/Tables/Tables";
+import ScrollToTop from "react-scroll-to-top";
 
 const Index = ({ currentUser }) => {
   const navigate = useNavigate();
@@ -21,7 +22,7 @@ const Index = ({ currentUser }) => {
           <h4 className="text-danger row">{currentUser?.balance},00</h4>
         </div>
       )}{" "}
-      <Tables transactions={currentUser?.current_transactions} />
+      <Tables transactions={currentUser?.current_transactions} button={true} />
       <br />
       <Link to="/history">
         <div className="d-grid gap-2">
@@ -30,6 +31,7 @@ const Index = ({ currentUser }) => {
           </Button>
         </div>
       </Link>
+      <ScrollToTop smooth color="#000" />
     </div>
   );
   return <div className="container">{content}</div>;

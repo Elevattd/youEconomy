@@ -21,13 +21,13 @@ const createTransaction = async (req, res, next) => {
     if (!user) {
       return res.status(400).send({ msg: `UserID: ${userId} missmatch` });
     } else {
-      const newTransaction = await user.createTransaction({
+      user.createTransaction({
         concept,
         value,
         type,
         date,
       });
-      res.status(200).send(newTransaction);
+      res.status(200).send({ msg: "Transaction create successfull" });
     }
   } catch (error) {
     next(error);
@@ -40,7 +40,7 @@ const getTransactionsById = async (req, res, next) => {
   try {
     const userTransactions = await Transaction.findByPk(id);
     if (userTransactions === null || userTransactions.length === 0) {
-      res.status(400).send({ msg: "No transactions for this id" });
+      res.status(400).send({ error: "No transactions for this id" });
     } else {
       res.status(200).send(userTransactions);
     }
@@ -59,7 +59,7 @@ const getCurrentTransaction = async (req, res, next) => {
     });
     transaction
       ? res.send(transaction)
-      : res.status(404).send(`Operation not found with id: ${id}`);
+      : res.status(404).send({ error: `Operation not found with id: ${id}` });
   } catch (error) {
     next.log(error);
   }
@@ -77,9 +77,9 @@ const getHistory = async (req, res, next) => {
     const transactions = await Transaction.findAll(options);
     transactions
       ? res.send(transactions)
-      : res
-          .status(404)
-          .send(`None transactions were found with userId: ${userId}`);
+      : res.status(404).send({
+          error: `None transactions were found with userId: ${userId}`,
+        });
   } catch (error) {
     next(error);
   }
@@ -93,17 +93,17 @@ const deleteTransaction = async (req, res, next) => {
 
     const user = await User.findByPk(userId);
     if (!user) {
-      res.status(401).send({ msg: "User not found" });
+      res.status(401).send({ error: "User not found" });
     }
     if (!transaction) {
       res
         .status(400)
-        .send({ msg: `User: ${userId}, has no transactions/or not match` });
+        .send({ error: `User: ${userId}, has no transactions/or not match` });
     }
     if (transaction.dataValues.userId != userId) {
       res
         .status(400)
-        .send({ msg: `Transaction: ${userId}, not exist/or not match` });
+        .send({ error: `Transaction: ${userId}, not exist/or not match` });
     } else {
       user.removeTransaction(transaction);
       transaction.destroy();
@@ -119,10 +119,11 @@ const deleteTransaction = async (req, res, next) => {
 const updateTransaction = async (req, res, next) => {
   const { id } = req.params;
   const { concept, value, date } = req.body;
+
   try {
     const transaction = await Transaction.findByPk(id);
     if (!transaction) {
-      res.status(400).send({ msg: `Transaction ${id} does not exist` });
+      res.status(400).send({ error: `Transaction ${id} does not exist` });
     } else {
       transaction.update({ concept, value, date });
       return res

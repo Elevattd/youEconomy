@@ -15,16 +15,8 @@ module.exports = (sequelize) => {
       allowNull: false,
     },
     date: {
-      type: DataTypes.DATEONLY,
+      type: DataTypes.STRING,
       allowNull: false,
-      defaultValue: DataTypes.NOW,
-      get() {
-        let dateClear = this.getDataValue("date");
-        dateClear = typeof dateClear === "string" && dateClear?.split("-");
-        return dateClear
-          ? `${dateClear[2]}/${dateClear[1]}/${dateClear[0]}`
-          : null;
-      },
     },
   });
 };

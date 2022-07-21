@@ -1,46 +1,59 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Button from "react-bootstrap/esm/Button";
 import Modal from "react-bootstrap/esm/Modal";
 import Form from "react-bootstrap/esm/Form";
 import InputGroup from "react-bootstrap/esm/InputGroup";
 import { useDispatch } from "react-redux";
-import { useCreateTransactionMutation } from "../../../features/api/userApi";
+
 import useUser from "../../../utils/hooks/useUser";
+import { useUpdateTransactionMutation } from "../../../features/api/userApi";
 import { Toast } from "../../../utils/alerts";
 
-const Transactions = (props) => {
-  const { currentUser, refreshList } = useUser();
+const UpdateTransaction = (props) => {
+  const { refreshList } = useUser();
   const [input, setInput] = useState({
+    id: "",
     concept: "",
     type: "",
-    value: null,
+    value: 0,
     date: "",
   });
-  const [createTransaction] = useCreateTransactionMutation();
+  const [updateTransaction] = useUpdateTransactionMutation();
   const dispatch = useDispatch();
 
-  const handleSubmit = async () => {
-    props.onHide();
+  useEffect(() => {
+    if (Object.keys(props.inputData).length) {
+      setInput(props.inputData);
+    }
+  }, [props.inputData]);
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     try {
       dispatch(
-        await createTransaction({ userId: currentUser.id, data: input }).then(
-          (r) => {
-            if (r.data.msg) {
-              refreshList();
-              props.onHide();
-              Toast.fire({
-                icon: "success",
-                title: `Transaction created!`,
-              });
-            }
+        await updateTransaction({
+          transaction: input.id,
+          inputData: {
+            concept: input.concept,
+            value: input.value,
+            date: input.date,
+          },
+        }).then((r) => {
+          if (r.data.msg) {
+            refreshList();
+            props.onHide();
+            Toast.fire({
+              icon: "success",
+              title: `Transaction updated!`,
+            });
           }
-        )
+        })
       );
     } catch (error) {
-      return error;
+      console.log(error);
     }
-    setInput({ concept: "", type: "", value: null, date: "" });
+
+    setInput({ concept: "", type: "", value: null });
   };
 
   const handleInputChange = (e) => {
@@ -64,22 +77,11 @@ const Transactions = (props) => {
     >
       <Modal.Header closeButton>
         <Modal.Title id="contained-modal-title-vcenter">
-          New Transaction.
+          Update transaction.
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <InputGroup className="mb-2 ">
-          <select
-            aria-label="Default select example"
-            name="type"
-            onChange={handleInputChange}
-          >
-            <option selected disabled value="default">
-              Select the transaction
-            </option>
-            <option value="egress">Egress</option>
-            <option value="entry">Entry</option>
-          </select>
           <span className="input-group-text" id="basic-addon1">
             $
           </span>
@@ -88,6 +90,7 @@ const Transactions = (props) => {
             aria-label="Text input with dropdown button"
             type="number"
             name="value"
+            value={input?.value}
             onChange={handleInputChange}
           />
           <span className="input-group-text">.00</span>
@@ -97,6 +100,7 @@ const Transactions = (props) => {
           <textarea
             className="form-control"
             aria-label="With textarea"
+            value={input?.concept}
             name="concept"
             onChange={handleInputChange}
           />
@@ -105,6 +109,7 @@ const Transactions = (props) => {
           type="date"
           name="date"
           // max={new Date().toISOString().slice(0, 8)}
+          //   value={input?.date.substring(0, 10).split("-").join("/")}
           min="2020-01-01"
           max="2026-12-31"
           onChange={handleInputChange}
@@ -115,9 +120,7 @@ const Transactions = (props) => {
           <Form.Check type="checkbox" label="Check" />
         </Form.Group>
         <Button
-          onClick={() => {
-            handleSubmit();
-          }}
+          onClick={handleSubmit}
           variant="primary "
           size="md"
           type="submit"
@@ -137,5 +140,4 @@ const Transactions = (props) => {
 
   return content;
 };
-
-export default Transactions;
+export default UpdateTransaction;

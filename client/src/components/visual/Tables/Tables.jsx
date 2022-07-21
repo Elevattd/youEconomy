@@ -2,18 +2,28 @@ import React, { useState } from "react";
 import Table from "react-bootstrap/Table";
 import Button from "react-bootstrap/esm/Button";
 import Container from "react-bootstrap/esm/Container";
-import { useDeleteTransactionMutation } from "../../../features/api/userApi";
+import {
+  useDeleteTransactionMutation,
+  useUpdateTrasactionMutation,
+} from "../../../features/api/userApi";
 import useUser from "../../../utils/hooks/useUser";
 import PostTransaction from "../PostTransaction/PostTransaction";
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
+import UpdateTransaction from "../UpdateTransaction/UpdateTransaction";
 
-const Tables = ({ transactions }) => {
+const Tables = ({ transactions, button }) => {
   const { currentUser, refreshList } = useUser();
   const [deleteTransaction] = useDeleteTransactionMutation();
+  const [inputData, setInputData] = useState({});
   const [modalShow, setModalShow] = useState(false);
+  const [updateModalShow, setUpdateModalShow] = useState(false);
 
-  const handleUpdate = async (id) => {};
+  const handleUpdate = async (item) => {
+    console.log("item", item);
+    setInputData(item);
+    setUpdateModalShow(true);
+  };
 
   const handleDelete = async (id) => {
     await deleteTransaction({ userId: currentUser.id, id: id });
@@ -30,8 +40,7 @@ const Tables = ({ transactions }) => {
             <th>Amount</th>
             <th>Date</th>
             <th>Type</th>
-
-            <th></th>
+            {!button && <th></th>}
           </tr>
         </thead>
         <tbody>
@@ -56,30 +65,47 @@ const Tables = ({ transactions }) => {
                     <h4 className="text-danger">Egress</h4>
                   )}
                 </td>
+                {!button && (
+                  <td>
+                    <button onClick={() => handleDelete(item.id)}>
+                      Delete
+                    </button>
 
-                <td>
-                  <button onClick={() => handleDelete(item.id)}>Delete</button>
-
-                  <button
-                    onClick={() => {
-                      handleDelete(item.id);
-                    }}
-                  >
-                    Update
-                  </button>
-                </td>
+                    <button
+                      onClick={() => {
+                        handleUpdate(item);
+                      }}
+                    >
+                      Update
+                    </button>
+                  </td>
+                )}
               </tr>
             );
           })}
         </tbody>
       </Table>
       <br />
-      <div className="d-grid gap-2">
-        <Button variant="primary" size="lg" onClick={() => setModalShow(true)}>
-          New Transaction.
-        </Button>
-      </div>
+
+      {button && (
+        <div className="d-grid gap-2">
+          <Button
+            variant="primary"
+            size="lg"
+            onClick={() => setModalShow(true)}
+          >
+            New Transaction.
+          </Button>
+        </div>
+      )}
+
       <PostTransaction show={modalShow} onHide={() => setModalShow(false)} />
+      <UpdateTransaction
+        show={updateModalShow}
+        onHide={() => setUpdateModalShow(false)}
+        refreshList={refreshList}
+        inputData={inputData}
+      />
     </div>
   );
 };

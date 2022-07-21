@@ -38,7 +38,7 @@ const History = () => {
       </select>
       <br />
       <br />
-      <Tables transactions={currentUser?.all_transactions} />
+      <Tables transactions={currentUser?.all_transactions} button={false} />
       <br />
       <Link to="/">
         <div className="d-grid gap-2">
