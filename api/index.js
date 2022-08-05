@@ -1,9 +1,9 @@
 const app = require("./src/app.js");
 const { sequelize } = require("./src/db");
-const config = require("./config.js");
+const { PORT } = process.env;
 
 sequelize.sync({ force: true }).then(() => {
-  app.listen(config.port, () => {
-    console.log(`LOAD SERVER --> ON: ${config.port}`);
+  app.listen(PORT, () => {
+    console.log(`LOAD SERVER --> ON: ${PORT}`);
   });
 });
