@@ -1,7 +1,7 @@
-const cookieParser = require("cookie-parser");
 const cors = require("cors");
 const express = require("express");
 const morgan = require("morgan");
+const cookieParser = require("cookie-parser");
 
 const { notFound } = require("./middlewares/notFound.js");
 const { handleError } = require("./middlewares/handleError.js");
