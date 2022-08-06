@@ -31,6 +31,20 @@ app.use(
   })
 );
 
+app.get("/", (req, res, next) => {
+  res.send(`
+  <h1>Welcome to youEconomy API</h1>
+  <h3>Endpoints</h3>
+  <ul>
+    <li> /api </li>
+    <li> /api/auth -> GET / POST </li>
+    <li> /api/user -> GET </li>
+    <li> /api/transaction -> GET / POST / DELETE / PUT</li>
+    <br />
+    <li> more details in code... :)</li>
+  </ul>
+`);
+});
 app.use("/api", router);
 
 app.use(notFound);
