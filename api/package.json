@@ -15,13 +15,11 @@
     "nodemon": "^2.0.19",
     "pg": "^8.7.3",
     "pg-hstore": "^2.3.4",
-    "sequelize": "^6.21.3",
-    "uuid": "^8.3.2"
+    "sequelize": "^6.21.3"
   },
   "scripts": {
     "start": "node index.js",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon index.js"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC"
