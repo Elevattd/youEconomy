@@ -76,8 +76,7 @@ const singIn = async (req, res, next) => {
 
 const handleRefreshToken = async (req, res, next) => {
   const cookies = req.cookies;
-
-  if (!cookies) return res.send({ msg: `No token found, unauthorized` });
+  if (!cookies.jwt) return res.status(401).send(`No token found, unauthorized`);
   if (
     !Object.keys(cookies).length ||
     !Object.keys(cookies.jwt ? cookies.jwt : {}).length
@@ -86,8 +85,7 @@ const handleRefreshToken = async (req, res, next) => {
   const refreshToken = cookies.jwt;
   try {
     const user = await getUser("refreshToken", refreshToken);
-    if (!user)
-      return next({ status: 403, msg: `No token found, unauthorized` });
+    if (!user) return res.status(401).send(`No token found, unauthorized`);
     let newToken = verifyRefreshToken(user);
     if (typeof newToken === "string") res.send({ accessToken: newToken });
     else throw newToken; // obj error {status, message}
@@ -102,7 +100,7 @@ const handleUserSession = async (req, res, next) => {
   const refreshToken = cookies.jwt;
   try {
     const user = await getUser("refreshToken", refreshToken);
-    if (!user) return next({ status: 404, message: "No session found" });
+    if (!user) return res.status(401).send(`No token found, unauthorized`);
     let newToken = verifyRefreshToken(user);
     if (typeof newToken === "string") {
       return res.send({
