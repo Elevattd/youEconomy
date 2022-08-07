@@ -2,7 +2,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { logOut, setCredentials } from "../slices/authSlice";
 
 const baseQuery = fetchBaseQuery({
-  baseUrl: "http://localhost:3001/api",
+  baseUrl: "https://you-economy.herokuapp.com/api",
   credentials: "include", // this will send back the HTTP only secury cookie with the refresh token
   prepareHeaders: (Headers, { getState }) => {
     const token = getState().auth.token;

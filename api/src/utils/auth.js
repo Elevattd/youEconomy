@@ -3,13 +3,14 @@ const jwt = require("jsonwebtoken");
 
 require("dotenv").config();
 
-const generateAcessToken = (user) => {
+const generateAccessToken = (user) => {
   return jwt.sign(
     {
       UserInfo: {
         name: user.name,
         email: user.email,
         id: user.id,
+        balance: user.balance,
       },
     },
     process.env.ACCESS_TOKEN_SECRET,
@@ -27,6 +28,7 @@ const updateRefreshToken = async (user, errase = false) => {
             name: user.name,
             email: user.email,
             id: user.id,
+            balance: user.balance,
           },
         },
         process.env.ACCESS_TOKEN_SECRET,
@@ -49,13 +51,13 @@ const verifyRefreshToken = (user) => {
         status: 403,
         message: "Token expired",
       };
-    newToken = generateAcessToken(user);
+    newToken = generateAccessToken(user);
   });
   return newToken;
 };
 
 module.exports = {
-  generateAcessToken,
+  generateAccessToken,
   updateRefreshToken,
   verifyRefreshToken,
 };
