@@ -35,7 +35,7 @@ module.exports = (sequelize) => {
       allowNull: false,
     },
     refreshToken: {
-      type: DataTypes.ARRAY,
+      type: DataTypes.STRING,
     },
   });
 };
