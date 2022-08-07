@@ -59,18 +59,40 @@ const singIn = async (req, res, next) => {
   }
 };
 
+// const handleRefreshToken = async (req, res, next) => {
+//   const cookies = req.cookies;
+//   if (!cookies.jwt) return res.status(401).send(`No token found, unauthorized`);
+//   const refreshToken = cookies.jwt;
+//   try {
+//     const user = await getUser("refreshToken", refreshToken);
+//     if (!user) return res.status(401).send(`No token found, unauthorized`);
+//     let newToken = verifyRefreshToken(user);
+//     if (typeof newToken === "string") res.send({ accesToken: newToken });
+//     else res.status(newToken.status).send(newToken.message);
+//   } catch (error) {
+//     next(error);
+//   }
+// };
+
 const handleRefreshToken = async (req, res, next) => {
   const cookies = req.cookies;
-  if (!cookies.jwt) return res.status(401).send(`No token found, unauthorized`);
+
+  if (!cookies) return res.send({ msg: `No token found, unauthorized` });
+  if (
+    !Object.keys(cookies).length ||
+    !Object.keys(cookies.jwt ? cookies.jwt : {}).length
+  )
+    return res.sendStatus(401); // unauthorized
   const refreshToken = cookies.jwt;
   try {
     const user = await getUser("refreshToken", refreshToken);
-    if (!user) return res.status(401).send(`No token found, unauthorized`);
+    if (!user)
+      return next({ status: 403, msg: `No token found, unauthorized` });
     let newToken = verifyRefreshToken(user);
-    if (typeof newToken === "string") res.send({ accesToken: newToken });
-    else res.status(newToken.status).send(newToken.message);
+    if (typeof newToken === "string") res.send({ accessToken: newToken });
+    else throw newToken; // obj error {status, message}
   } catch (error) {
-    next(error);
+    return next(error);
   }
 };
 

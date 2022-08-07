@@ -14,7 +14,7 @@ const generateAccessToken = (user) => {
       },
     },
     process.env.ACCESS_TOKEN_SECRET,
-    { expiresIn: "10m" }
+    { expiresIn: "1d" }
   );
 };
 
@@ -46,12 +46,13 @@ const verifyRefreshToken = (user) => {
   const token = user.refreshToken;
   let newToken;
   jwt.verify(token, process.env.REFRESH_TOKEN_SECRET, (error, decoded) => {
-    if (error || user.email !== decoded.UserInfo.email)
+    let decodedUserInfo = decoded;
+    if (error || user.email !== decodedUserInfo.UserInfo.email)
       newToken = {
         status: 403,
         message: "Token expired",
       };
-    newToken = generateAccessToken(user);
+    else newToken = generateAccessToken(user);
   });
   return newToken;
 };
