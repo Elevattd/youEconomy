@@ -19,7 +19,8 @@ const singUp = async (req, res, next) => {
     };
     // Verify if user exists
     const userExists = await getUser("email", user.email);
-    if (userExists) return res.status(400).send(`User already exists`);
+    if (userExists)
+      return res.status(400).send({ error: `User already exists` });
     // Create user
     await User.create(user);
     res.sendStatus(201);
@@ -33,7 +34,7 @@ const singIn = async (req, res, next) => {
   try {
     //Verify if user exists
     user = await await getUser("email", req.body.email);
-    if (!user) return res.status(404).send(`User not found`);
+    if (!user) return res.status(404).send({ error: `User not found` });
     //Verify password
     if (!(await bcrypt.compare(req.body.password, user.password)))
       return res.status(400).send(`Password incorrect`);
@@ -74,7 +75,8 @@ const singIn = async (req, res, next) => {
 
 const handleRefreshToken = async (req, res, next) => {
   const cookies = req.cookies;
-  if (!cookies.jwt) return res.status(401).send(`No token found, unauthorized`);
+  if (!cookies.jwt)
+    return res.status(401).send({ error: `No token found, unauthorized` });
   if (
     !Object.keys(cookies).length ||
     !Object.keys(cookies.jwt ? cookies.jwt : {}).length
