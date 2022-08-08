@@ -10,7 +10,7 @@ const config = {
   DB_PORT: process.env.DB_PORT || 5432,
   port: process.env.API_PORT || 3001,
   host: process.env.API_HOST || "localhost",
-  cors: process.env.CORS || "http://localhost:3000",
+  cors: process.env.CORS_URL || "http://localhost:3000",
   production: process.env.NODE_ENV == "production",
 
   //
