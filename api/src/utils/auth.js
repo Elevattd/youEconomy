@@ -39,10 +39,9 @@ const updateRefreshToken = async (user, errase = false) => {
       { refreshToken: token },
       { where: { email: user.email } }
     );
-    console.log("token", token);
+
     return token;
   } catch (error) {
-    console.log("error", error);
     throw error;
   }
 };

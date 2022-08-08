@@ -18,7 +18,6 @@ const { User } = require("../db");
 // };
 
 const authMiddleware = async (req, res, next) => {
-  console.log("req", req);
   try {
     const token = req.headers.authorization?.split(" ")[1];
     const bearer = req.headers.authorization?.split(" ")[0];
