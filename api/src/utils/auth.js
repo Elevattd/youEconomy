@@ -35,9 +35,14 @@ const updateRefreshToken = async (user, errase = false) => {
         { expiresIn: "1d" }
       ));
   try {
-    await User.update({ refreshToken: token }, { where: { id: user.id } });
+    await User.update(
+      { refreshToken: token },
+      { where: { email: user.email } }
+    );
+    console.log("token", token);
     return token;
   } catch (error) {
+    console.log("error", error);
     throw error;
   }
 };
