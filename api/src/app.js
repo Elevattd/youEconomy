@@ -8,6 +8,7 @@ const { handleError } = require("./middlewares/handleError.js");
 const router = require("./routes");
 require("./db.js");
 const { CORS_URL } = process.env;
+const { config } = require("..config/");
 
 const app = express();
 app.use(express.urlencoded({ extended: true, limit: "50mb" })); //middleware
@@ -17,7 +18,7 @@ app.use(morgan("dev"));
 
 app.use(
   cors({
-    origin: CORS_URL || "http://localhost:3000",
+    origin: config.cors,
     credentials: true,
     methods: ["GET", "POST", "OPTIONS", "PUT", "DELETE"],
     allowedHeaders: [
