@@ -101,7 +101,7 @@ const handleUserSession = async (req, res, next) => {
   try {
     const user = await getUser("refreshToken", refreshToken);
     if (!user) return res.status(401).send(`No token found, unauthorized`);
-    let newToken = verifyRefreshToken(user);
+    let newToken = await verifyRefreshToken(user);
     if (typeof newToken === "string") {
       return res.send({
         user: {

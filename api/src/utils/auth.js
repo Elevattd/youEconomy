@@ -27,34 +27,24 @@ const updateRefreshToken = async (user, errase = false) => {
           UserInfo: {
             name: user.name,
             email: user.email,
-            id: user.id,
-            balance: user.balance,
           },
         },
-        process.env.ACCESS_TOKEN_SECRET,
+        process.env.REFRESH_TOKEN_SECRET,
         { expiresIn: "1d" }
       ));
-  try {
-    await User.update(
-      { refreshToken: token },
-      { where: { email: user.email } }
-    );
-
-    return token;
-  } catch (error) {
-    throw error;
-  }
+  await User.update({ refreshToken: token }, { where: { name: user.name } });
+  return token;
 };
 
 const verifyRefreshToken = (user) => {
   const token = user.refreshToken;
-  let newToken;
-  jwt.verify(token, process.env.REFRESH_TOKEN_SECRET, (error, decoded) => {
+  let newToken = "";
+  jwt.verify(token, process.env.REFRESH_TOKEN_SECRET, (err, decoded) => {
     let decodedUserInfo = decoded;
-    if (error || user.email !== decodedUserInfo.UserInfo.email)
+    if (err || user.name !== decodedUserInfo.UserInfo.name)
       newToken = {
         status: 403,
-        message: "Token expired",
+        message: `You don't have access. Token no longer valid`,
       };
     else newToken = generateAccessToken(user);
   });
