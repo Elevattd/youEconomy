@@ -8,7 +8,7 @@ const { handleError } = require("./middlewares/handleError.js");
 const router = require("./routes");
 require("./db.js");
 const { CORS_URL } = process.env;
-const { config } = require("..config/");
+const config = require("../config");
 
 const app = express();
 app.use(express.urlencoded({ extended: true, limit: "50mb" })); //middleware

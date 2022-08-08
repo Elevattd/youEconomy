@@ -1,4 +1,4 @@
-const { User, Transaction } = require("../db");
+const { User } = require("../db");
 const { getUser } = require("../utils/user");
 const {
   generateAccessToken,
@@ -6,8 +6,6 @@ const {
   verifyRefreshToken,
 } = require("../utils/auth");
 const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
-const config = require("../../config");
 
 const singUp = async (req, res, next) => {
   let user;
