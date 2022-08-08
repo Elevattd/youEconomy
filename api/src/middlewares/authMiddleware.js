@@ -37,7 +37,7 @@ const authMiddleware = async (req, res, next) => {
     if (!isUserExist) {
       return res.status(404).send({ msg: "No user finded, invalid token" });
     }
-
+    console.log("isUserExist", isUserExist);
     next();
   } catch (error) {
     return res.status(404).send({ error });
