@@ -37,7 +37,7 @@ const singIn = async (req, res, next) => {
     if (!user) return res.status(404).send({ error: `User not found` });
     //Verify password
     if (!(await bcrypt.compare(req.body.password, user.password)))
-      return res.status(400).send(`Password incorrect`);
+      return res.status(400).send({ error: `Password incorrect` });
     const accessToken = generateAccessToken(user);
     const refreshToken = await updateRefreshToken(user);
     res.cookie("jwt", refreshToken, {
